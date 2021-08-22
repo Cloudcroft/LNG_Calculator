@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+
+
+{% block content %}
+
+<div class=container>
+  <input type="Submit" value="Edit"/>
+  <input type="Submit" value="Save"/>
+  <input type="Submit" value="Lock"/>
+  <input type="Submit" value="Delete" style="color: red;"/>
+  <hr>
+</div>
+
+
+<form method="post" action="{{ url_for('operation_result') }}" id="calculator_form">
+    <div class="container">
+
+      <label for="methodolgy">Cargo ID :</label>
+      <input type="text" name="cargoid" placeholder="<not required>"><br/>
+      <label for="terminal">Terminal :</label>
+      <select id="terminal" name="terminal">
+          <option value="CLNG">Cameron LNG</option>
+          <option value="CCL">Corpus Christi LNG</option>
+          <option value="FLNG">Freeport LNG</option>
+          <option value="SPL">Sabine Pass LNG</option>
+      </select><br/>
+      <label for="type">Operation Type :</label>
+      <select id="type" name="type">
+        <option value="loading">Loading</option>
+        <option value="unloading">Unloading</option>
+    </select><br/>
+      <label for="methodolgy">Calculation :</label>
+      <select id="methodolgy" name="methodolgy">
+          <option value="standard">Standard</option>
+
+      </select><br/>
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ message  }} 
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+      <hr>
+      
+         <h3>LNG Composition</h3>
+
+
+<!--  <div style = font-size:20px; font-weight:bold; margin-left:0px;>  -->
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Measured (mol%)</th>
+                <th>Normalized (mol%)</th>
+                <th>Adjusted (mol frac)</th>
+              </tr>
+            </thead>
+
+
+            <tbody>
+              <tr>
+                <td>Methane:</td>
+                <td><input type="text" name="C1_input" value={{ '%.4f' % liquid[0,0] }}></td>
+                <td>{{ '%.4f' % liquid[0,1] }}</td>
+                <td>{{ '%.4f' % liquid[0,2] }}</td>
+              </tr>
+              <tr>
+                <td>Ethane:</td>
+                <td><input type="text" name="C2_input" value={{ '%.4f' % liquid[1,0] }}></td>
+                <td>{{ '%.4f' % liquid[1,1] }}</td>
+                <td>{{ '%.4f' % liquid[1,2] }}</td>
+              </tr>
+              <tr>
+                <td>Propane:</td>
+                <td><input type="text" name="C3_input" value={{ '%.4f' % liquid[2,0] }}></td>
+                <td>{{ '%.4f' % liquid[2,1] }}</td>
+                <td>{{ '%.4f' % liquid[2,2] }}</td>
+              </tr>
+              <tr>
+                <td>Iso-Butane:</td>
+                <td><input type="text" name="iC4_input" value={{ '%.4f' % liquid[3,0] }}></td>
+                <td>{{ '%.4f' %liquid[3,1] }}</td>
+                <td>{{ '%.4f' % liquid[3,2] }}</td>
+              </tr> 
+              <tr>
+                <td>N-Butane:</td>
+                <td><input type="text" name="nC4_input" value={{ '%.4f' % liquid[4,0] }}></td>
+                <td>{{ '%.4f' % liquid[4,1] }}</td>
+                <td>{{ '%.4f' % liquid[4,2] }}</td>
+              </tr>   
+              <tr>
+                <td>Iso-Pentane:</td>
+                <td><input type="text" name="iC5_input" value={{ '%.4f' % liquid[5,0] }}></td>
+                <td>{{ '%.4f' % liquid[5,1] }}</td>
+                <td>{{ '%.4f' % liquid[5,2] }}</td>
+              </tr>   
+              <tr>
+                <td>N-Pentane:</td>
+                <td><input type="text" name="nC5_input" value={{ '%.4f' % liquid[6,0] }}></td>
+                <td>{{ '%.4f' % liquid[6,1] }}</td>
+                <td>{{ '%.4f' % liquid[6,2] }}</td>
+              </tr>   
+              <tr>
+                <td>Hexane:</td>
+                <td><input type="text" name="C6_input" value={{ '%.4f' % liquid[7,0] }}></td>
+                <td>{{ '%.4f' % liquid[7,1] }}</td>
+                <td>{{ '%.4f' % liquid[7,2] }}</td>
+              </tr>   
+              <td>Nitrogen:</td>
+              <td><input type="text" name="N2_input" value={{ '%.4f' % liquid[8,0] }}></td>
+              <td>{{ '%.4f' % liquid[8,1] }}</td>
+              <td>{{ '%.4f' % liquid[8,2] }}</td>
+            </tr>                 
+              <td>Total:</td>
+              <td><input type="text" name="total" value={{ '%.4f' % liquid[11,0] }}></td>
+              <td>{{ '%.4f' % liquid[11,1] }}</td>
+              <td>{{ '%.4f' % liquid[11,2] }}</td>
+            </tr>             
+            
+            
+            </tbody>
+          </table>
+        <!-- </div>  -->
+      </main>
+    </div>
+  </div>
+
+    <div class="container">
+    <form method="post" action="{{ url_for('operation_result') }}" id="calculator_form">
+       
+        <label for="normalization">Normalization</label>
+        <select id="normalization" name="normalization">
+            <option value="methane">Methane Only</option>
+            <option value="proportional">Proportional</option>
+            <option value="none">None</option>
+        </select><br/>
+        <br />
+        <label for="formFileSm" class="form-label">Upload LNG Composition Data</label>
+        <input class="form-control form-control-sm" id="formFileSm" type="file" />
+
+        <hr>
+
+        <h3>Cargo Data</h3>      
+
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Measured Parameter</th>
+              <th>Opening Custody</th>
+              <th>Closing Custody</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vapor Temperature (degC):</td>
+              <td><input type="text" name="vapor_temp_before" value={{ '%.1f' % readings[0,0]  }}></td>
+              <td><input type="text" name="vapor_temp_after" value={{ '%.1f' % readings[0,1] }}></td>
+            </tr>  
+            <tr>
+              <td>Vapor Pressure (millibar):</td>
+              <td><input type="text" name="vapor_pres_before" value={{ '%.0f' % readings[1,0] }}></td>
+              <td><input type="text" name="vapor_pres_after" value={{ '%.0f' % readings[1,1] }}></td>
+            </tr>  
+            <tr>
+              <td>Liquid Temperature (degC):</td>
+              <td><input type="text" name="liq_temp_before" value={{ '%.1f' % readings[2,0] }}></td>
+              <td><input type="text" name="liq_temp_after" value={{ '%.1f' % readings[2,1] }}></td>              
+            </tr>
+            <tr>  
+              <td>Liquid Volume (cbm):</td>
+              <td><input type="text" name="liq_vol_before" value={{ '%.3f' % readings[3,0] }}></td>
+              <td><input type="text" name="liq_vol_after" value={{ '%.3f' % readings[3,1] }}></td>              
+            </tr>    
+          </tbody>
+        </table>
+      <!-- </div>  -->
+    </main>
+
+
+        <hr>    
+        <input type="submit" value="Submit"/>
+        <input type="reset"  value="Reset" style="color: red;"/>
+    </form>
+    </div>
+    
+    <div class="container">
+      <hr>
+      <input type="submit" value="Report"/>
+      <input type="reset"  value="Transmit (json)"/>
+    </div>
+    <div class="container">
+      <hr>
+      <br />
+      {{ datetime }}
+      <p>Calculation results:</p>
+      {% if calculation_success == True %}
+
+          <p>LNG:<br />
+            GHV ideal = {{ '%.1f' % foobar['ghv_ideal']}} BTU/scf<br />
+             GHV real = {{ '%.1f' % foobar['ghv_real'] }} BTU/scf<br />
+             Molar mass = {{ '%.4f' % foobar['mw'] }}<br />
+             Xi x Vi = {{ '%.6f' % foobar['xi_vi'] }}<br />
+             Xi x Hi x Vi = {{ '%.1f' % foobar['xi_mi_hmi'] }}<br />
+             Compressibility = {{ '%.5f' % foobar['z'] }}<br />
+
+             <p>Cargo Tank Vapors:<br />
+              GHV ideal = {{ '%.1f' % foobar['ghv_ideal']}} BTU/scf<br />
+              GHV real = {{ '%.1f' % foobar['ghv_real'] }} BTU/scf<br />
+              Molar mass = {{ '%.4f' % foobar['mw'] }}<br />
+              Xi x Vi = {{ '%.6f' % foobar['xi_vi'] }} BTU/scf<br />
+              Xi x Hi x Vi = {{ '%.1f' % foobar['xi_mi_hmi'] }}<br />
+              Compressibility = {{ '%.5f' % foobar['z'] }}<br />
+
+
+             <p>Custody Calculation:<br />
+              Volume (OCT) = {{ '%.3f' % foobar['liq_vol_before']}} cbm<br />
+              Volume (CCT) = {{ '%.3f' % foobar['liq_vol_after'] }} cbm<br />
+              Net Volume = {{ '%.3f' % foobar['liq_vol_net'] }} cbm<br />
+              
+              k1 = {{ '%.6f' % foobar['k1']}}<br />
+              k2 = {{ '%.6f' % foobar['k2']}}<br />
+              C =  {{ '%.6f' % foobar['c']}}<br />
+              Density = {{ '%.2f' % foobar['density']}}<br />
+              Hm (mass) = {{ '%.2f' % foobar['hm_btu']}} Btu/kg<br />
+              Hm (mass) = {{ '%.2f' % foobar['hm_mj']}} MJ/kg<br />
+              E gross = {{ '%.2f' % foobar['e_gross']}} MMBtu<br />
+
+      {% endif %}  
+      {% if calculation_success == False %}
+          <br/>
+          <p>{{error}}</p>
+          <p>{{input1}} {{operation}} {{input2}} = "{{result}}"</p>
+      {% endif %}
+    </div>
+
+{% endblock %}

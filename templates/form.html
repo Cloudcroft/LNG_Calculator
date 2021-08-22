@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <h2>Thank you!</h2>
+  
+  {% for subscriber in subscribers %}
+    {{subscriber}}<br />
+  {% endfor %}  
+  
+</div>
+
+
+{% endblock %}
