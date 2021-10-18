@@ -9,6 +9,17 @@
     <link rel="stylesheet" type="text/css"
     href="{{ url_for('static', filename='calculator.css') }}"/>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BRCJ11SZCW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BRCJ11SZCW');
+</script> 
+    
+    
   <title>
     {% block title %}GENERIC TITLE{% endblock %}
   </title>
